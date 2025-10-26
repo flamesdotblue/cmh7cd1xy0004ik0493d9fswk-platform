@@ -1,28 +1,38 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import Sections from './components/Sections';
+import Footer from './components/Footer';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [showTop, setShowTop] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 600);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white text-slate-900 dark:bg-[#0a0a0a] dark:text-slate-100 transition-colors duration-300">
+      <Navbar />
+      <Hero />
+      <Sections />
+      <Footer />
+
+      {showTop && (
+        <button
+          onClick={scrollToTop}
+          aria-label="Scroll to top"
+          className="fixed bottom-6 right-6 z-50 rounded-full bg-gradient-to-tr from-amber-400 to-fuchsia-500 text-white shadow-lg shadow-amber-500/20 hover:shadow-fuchsia-500/30 transition-all p-3"
+        >
+          ↑
+        </button>
+      )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
